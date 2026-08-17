@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 SCRIPT = Path(__file__).parents[1] / "scripts" / "build_shadowrocket_config.py"
+WORKFLOW = Path(__file__).parents[1] / ".github" / "workflows" / "publish.yml"
 SPEC = importlib.util.spec_from_file_location("builder", SCRIPT)
 builder = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
@@ -30,3 +31,10 @@ class TransformTests(unittest.TestCase):
     def test_rejects_already_patched_source(self):
         with self.assertRaisesRegex(ValueError, "already contains"):
             builder.transform("# BEGIN local routing patch\n[Rule]\n")
+
+    def test_workflow_stages_generated_file_before_diff_check(self):
+        workflow = WORKFLOW.read_text(encoding="utf-8")
+        self.assertLess(
+            workflow.index("git add published/shadowrocket-custom.conf"),
+            workflow.index("git diff --cached --quiet"),
+        )
