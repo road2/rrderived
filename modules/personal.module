@@ -1,0 +1,83 @@
+#!name=Personal Routing Rules
+#!desc=Priority routing overrides for personal use across Wi-Fi and cellular networks.
+
+[Proxy Group]
+# Region-specific automatic groups. The Personal- prefix avoids collisions with the base configuration.
+Personal-HK-Auto = url-test,policy-regex-filter=🇭🇰|HK|Hong Kong|HongKong|香港,url=http://www.gstatic.com/generate_204,interval=600,tolerance=100,timeout=5
+Personal-JP-SG-Auto = url-test,policy-regex-filter=🇯🇵|JP|Japan|日本|东京|Tokyo|大阪|Osaka|🇸🇬|SG|Singapore|新加坡,url=http://www.gstatic.com/generate_204,interval=600,tolerance=100,timeout=5
+
+# Stable service policies with a generic-proxy fallback for subscriptions whose node names do not match.
+Personal-AI = fallback,Personal-JP-SG-Auto,PROXY,url=https://chatgpt.com,interval=300,timeout=8
+Personal-YFSP = fallback,Personal-HK-Auto,PROXY,url=https://www.yfsp.tv/,interval=300,timeout=8
+Personal-Apple = fallback,DIRECT,Personal-HK-Auto,PROXY,url=https://captive.apple.com/hotspot-detect.html,interval=300,timeout=5
+Personal-Microsoft = fallback,Personal-HK-Auto,PROXY,DIRECT,url=https://login.microsoftonline.com/,interval=300,timeout=5
+
+[Rule]
+# AI services and Google web dependencies: prefer Japan/Singapore nodes.
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/OpenAI/OpenAI.list,Personal-AI
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Claude/Claude.list,Personal-AI
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Gemini/Gemini.list,Personal-AI
+DOMAIN-SUFFIX,google.com,Personal-AI
+DOMAIN-SUFFIX,google.com.hk,Personal-AI
+DOMAIN-SUFFIX,googleapis.com,Personal-AI
+DOMAIN-SUFFIX,gstatic.com,Personal-AI
+DOMAIN-SUFFIX,googleusercontent.com,Personal-AI
+DOMAIN-SUFFIX,google.ai,Personal-AI
+
+# YFSP and its Cloudflare Turnstile challenge must keep a stable exit.
+DOMAIN-SUFFIX,yfsp.tv,Personal-YFSP
+DOMAIN,challenges.cloudflare.com,Personal-YFSP
+
+# Apple connectivity, push, App Store and iCloud services: direct first, then Hong Kong.
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Apple/Apple.list,Personal-Apple
+
+# Microsoft account, Graph, OneDrive and Microsoft 365 endpoints.
+RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Microsoft/Microsoft.list,Personal-Microsoft
+DOMAIN-SUFFIX,microsoftonline.com,Personal-Microsoft
+DOMAIN-SUFFIX,msauth.net,Personal-Microsoft
+DOMAIN-SUFFIX,msauthimages.net,Personal-Microsoft
+DOMAIN-SUFFIX,live.com,Personal-Microsoft
+DOMAIN-SUFFIX,live.net,Personal-Microsoft
+DOMAIN-SUFFIX,onedrive.com,Personal-Microsoft
+DOMAIN-SUFFIX,1drv.com,Personal-Microsoft
+DOMAIN-SUFFIX,sharepoint.com,Personal-Microsoft
+DOMAIN-SUFFIX,sharepointonline.com,Personal-Microsoft
+DOMAIN-SUFFIX,microsoftpersonalcontent.com,Personal-Microsoft
+DOMAIN-SUFFIX,storage.live.com,Personal-Microsoft
+DOMAIN-SUFFIX,oneclient.sfx.ms,Personal-Microsoft
+DOMAIN-SUFFIX,svc.ms,Personal-Microsoft
+DOMAIN-SUFFIX,officeclient.microsoft.com,Personal-Microsoft
+DOMAIN-SUFFIX,cloud.microsoft,Personal-Microsoft
+DOMAIN-SUFFIX,static.microsoft,Personal-Microsoft
+DOMAIN-SUFFIX,usercontent.microsoft,Personal-Microsoft
+
+# WeChat, Tencent and payments
+DOMAIN-SUFFIX,qq.com,DIRECT
+DOMAIN-SUFFIX,weixin.qq.com,DIRECT
+DOMAIN-SUFFIX,weixin.com,DIRECT
+DOMAIN-SUFFIX,weixinbridge.com,DIRECT
+DOMAIN-SUFFIX,gtimg.com,DIRECT
+DOMAIN-SUFFIX,qpic.cn,DIRECT
+DOMAIN-SUFFIX,tenpay.com,DIRECT
+DOMAIN-SUFFIX,qcloud.com,DIRECT
+DOMAIN-SUFFIX,myqcloud.com,DIRECT
+DOMAIN-SUFFIX,tencent.com,DIRECT
+
+# News and media
+DOMAIN-SUFFIX,oeeee.com,DIRECT
+DOMAIN-SUFFIX,nfmedia.com,DIRECT
+DOMAIN-SUFFIX,nandu.com,DIRECT
+DOMAIN-SUFFIX,ndbdi.cn,DIRECT
+DOMAIN-SUFFIX,southcn.com,DIRECT
+DOMAIN-SUFFIX,caixin.com,DIRECT
+DOMAIN-SUFFIX,nfnews.com,DIRECT
+
+# Video and music
+DOMAIN-SUFFIX,youku.com,DIRECT
+DOMAIN-SUFFIX,music.163.com,DIRECT
+DOMAIN-SUFFIX,bilibili.com,DIRECT
+
+# Social platforms
+DOMAIN-SUFFIX,xiaohongshu.com,DIRECT
+DOMAIN-SUFFIX,douyin.com,DIRECT
+DOMAIN-SUFFIX,weibo.com,DIRECT
