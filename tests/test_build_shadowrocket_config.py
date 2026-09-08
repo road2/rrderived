@@ -21,7 +21,8 @@ class TransformTests(unittest.TestCase):
         self.assertIn("OpenAI-JP-SG-Auto = url-test", result)
         self.assertIn("Gemini-JP-SG-Auto = url-test", result)
         self.assertIn("HK-Auto = url-test", result)
-        self.assertLess(result.index("DOMAIN-SUFFIX,google.com,Gemini-JP-SG-Auto"), result.index("DOMAIN-SUFFIX,t.me,HK-Auto"))
+        self.assertIn("Oracle-AI-Auto = fallback", result)
+        self.assertLess(result.index("DOMAIN-SUFFIX,google.com,Oracle-AI-Auto"), result.index("DOMAIN-SUFFIX,t.me,HK-Auto"))
         self.assertIn("DOMAIN-SUFFIX,qq.com,Direct", result)
         self.assertIn("FINAL,HK-Auto", result)
         self.assertIn("[URL Rewrite]\nexample 302", result)
@@ -38,7 +39,7 @@ class TransformTests(unittest.TestCase):
         result = builder.transform("[General]\n[Rule]\nFINAL,PROXY\n")
 
         self.assertIn(
-            "RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/OpenAI/OpenAI.list,OpenAI-JP-SG-Auto",
+            "RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/OpenAI/OpenAI.list,Oracle-AI-Auto",
             result,
         )
         self.assertNotIn("/Shadowrocket/AI/AI.list", result)

@@ -34,11 +34,18 @@ class PersonalModuleTests(unittest.TestCase):
     def test_ai_policy_falls_back_to_builtin_proxy(self):
         content = MODULE.read_text(encoding="utf-8")
         self.assertIn(
-            "Personal-AI = fallback,Personal-JP-SG-Auto,PROXY,",
+            "Personal-AI = fallback,Personal-Oracle-AI,Personal-JP-SG-Auto,",
             content,
         )
         self.assertIn("OpenAI/OpenAI.list,Personal-AI", content)
         self.assertNotIn("OpenAI/OpenAI.list,Personal-JP-SG-Auto", content)
+
+    def test_ai_fallback_excludes_hong_kong(self):
+        content = MODULE.read_text(encoding="utf-8")
+        self.assertIn("Personal-Oracle-AI = fallback", content)
+        self.assertIn("Personal-JP-SG-Auto,url=https://www.gstatic.com", content)
+        ai = content[content.index("Personal-AI ="):content.index("Personal-YFSP =")]
+        self.assertNotIn("Personal-HK-Auto", ai)
 
     def test_module_contains_no_home_network_or_credentials(self):
         content = MODULE.read_text(encoding="utf-8")
