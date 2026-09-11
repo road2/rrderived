@@ -5,7 +5,7 @@
 # Region-specific automatic groups. The Personal- prefix avoids collisions with the base configuration.
 Personal-HK-Auto = url-test,policy-regex-filter=🇭🇰|HK|Hong Kong|HongKong|香港,url=http://www.gstatic.com/generate_204,interval=600,tolerance=100,timeout=5
 Personal-JP-SG-Auto = url-test,policy-regex-filter=🇯🇵|JP|Japan|日本|东京|Tokyo|大阪|Osaka|🇸🇬|SG|Singapore|新加坡,url=http://www.gstatic.com/generate_204,interval=600,tolerance=100,timeout=5
-Personal-Oracle-AI = fallback,policy-regex-filter=Oracle|oracle|San Jose|SanJose|圣何塞,Personal-JP-SG-Auto,url=https://www.gstatic.com/generate_204,interval=300,timeout=8
+Personal-Oracle-AI = fallback,policy-regex-filter=Oracle|oracle|Reality|San Jose|SanJose|圣何塞,Personal-JP-SG-Auto,url=https://www.gstatic.com/generate_204,interval=300,timeout=8
 
 # Stable service policies with a generic-proxy fallback for subscriptions whose node names do not match.
 Personal-AI = fallback,Personal-Oracle-AI,Personal-JP-SG-Auto,url=https://chatgpt.com,interval=300,timeout=8
@@ -24,6 +24,8 @@ DOMAIN-SUFFIX,googleapis.com,Personal-AI
 DOMAIN-SUFFIX,gstatic.com,Personal-AI
 DOMAIN-SUFFIX,googleusercontent.com,Personal-AI
 DOMAIN-SUFFIX,google.ai,Personal-AI
+DOMAIN-SUFFIX,antigravity.google,Personal-AI
+DOMAIN-SUFFIX,antigravity-cli-auto-updater-974169037036.us-central1.run.app,Personal-AI
 
 # YFSP and its Cloudflare Turnstile challenge must keep a stable exit.
 DOMAIN-SUFFIX,yfsp.tv,Personal-YFSP
