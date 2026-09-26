@@ -6,6 +6,7 @@
 Personal-HK-Auto = url-test,policy-regex-filter=🇭🇰|HK|Hong Kong|HongKong|香港,url=http://www.gstatic.com/generate_204,interval=600,tolerance=100,timeout=5
 Personal-JP-SG-Auto = url-test,policy-regex-filter=🇯🇵|JP|Japan|日本|东京|Tokyo|大阪|Osaka|🇸🇬|SG|Singapore|新加坡,url=http://www.gstatic.com/generate_204,interval=600,tolerance=100,timeout=5
 Personal-Oracle-AI = fallback,policy-regex-filter=Oracle|oracle|Reality|San Jose|SanJose|圣何塞,Personal-JP-SG-Auto,url=https://www.gstatic.com/generate_204,interval=300,timeout=8
+Personal-Muse = fallback,Personal-Oracle-AI,Personal-JP-SG-Auto,url=https://muse.ai,interval=300,timeout=8
 
 # Stable service policies with a generic-proxy fallback for subscriptions whose node names do not match.
 Personal-AI = fallback,Personal-Oracle-AI,Personal-JP-SG-Auto,url=https://chatgpt.com,interval=300,timeout=8
@@ -14,6 +15,10 @@ Personal-Apple = fallback,DIRECT,Personal-HK-Auto,PROXY,url=https://captive.appl
 Personal-Microsoft = fallback,Personal-HK-Auto,PROXY,DIRECT,url=https://login.microsoftonline.com/,interval=300,timeout=5
 
 [Rule]
+# Muse from Meta: route product and Model API traffic through Oracle first.
+DOMAIN-SUFFIX,muse.ai,Personal-Muse
+DOMAIN-SUFFIX,api.meta.ai,Personal-Muse
+
 # AI services and Google web dependencies: prefer the Oracle-labelled node; fall back only to Japan/Singapore.
 RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/OpenAI/OpenAI.list,Personal-AI
 RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/Claude/Claude.list,Personal-AI

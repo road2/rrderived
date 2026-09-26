@@ -47,6 +47,16 @@ class PersonalModuleTests(unittest.TestCase):
         ai = content[content.index("Personal-AI ="):content.index("Personal-YFSP =")]
         self.assertNotIn("Personal-HK-Auto", ai)
 
+    def test_muse_from_meta_uses_oracle_first(self):
+        content = MODULE.read_text(encoding="utf-8")
+        self.assertIn(
+            "Personal-Muse = fallback,Personal-Oracle-AI,Personal-JP-SG-Auto,",
+            content,
+        )
+        muse_rules = content[content.index("# Muse from Meta") : content.index("# AI services")]
+        self.assertIn("DOMAIN-SUFFIX,muse.ai,Personal-Muse", muse_rules)
+        self.assertIn("DOMAIN-SUFFIX,api.meta.ai,Personal-Muse", muse_rules)
+
     def test_module_contains_no_home_network_or_credentials(self):
         content = MODULE.read_text(encoding="utf-8")
         self.assertNotRegex(content, r"192\.168\.5\.")
